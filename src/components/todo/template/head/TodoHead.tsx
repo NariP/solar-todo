@@ -1,5 +1,7 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { getFormattedTime } from '../../../../utils';
+import { TIME_FORMAT } from '../../../../constants';
 
 const TodoHeadBlock = styled.div`
   display: flex;
@@ -15,21 +17,12 @@ const DateText = styled.div`
   padding-left: 10px;
 `;
 
-const DayText = styled.div`
-  font-size: 22px;
-  color: #119955;
-  padding-top: 5px;
-`;
-
 const TodoHead = () => {
-  //@TODO 현재 시간을 표시해야합니다.
-  const dayString = "Tuesday";
-  const dateString = "July 20, 2021";
+  const dayString = getFormattedTime(TIME_FORMAT['EN']);
 
   return (
     <TodoHeadBlock>
-      <DayText>{dayString}</DayText>
-      <DateText>{dateString}</DateText>
+      <DateText>{dayString}</DateText>
     </TodoHeadBlock>
   );
 };
