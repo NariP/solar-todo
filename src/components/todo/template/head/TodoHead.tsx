@@ -3,6 +3,15 @@ import styled from 'styled-components';
 import { getFormattedTime } from 'utils';
 import { TIME_FORMAT } from 'utils/constants';
 
+const TodoHead = () => {
+  const dayString = getFormattedTime(TIME_FORMAT['EN']);
+
+  return (
+    <TodoHeadBlock>
+      <DateText>{dayString}</DateText>
+    </TodoHeadBlock>
+  );
+};
 const TodoHeadBlock = styled.div`
   display: flex;
   justify-content: center;
@@ -16,15 +25,4 @@ const DateText = styled.div`
   color: #119955;
   padding-left: 10px;
 `;
-
-const TodoHead = () => {
-  const dayString = getFormattedTime(TIME_FORMAT['EN']);
-
-  return (
-    <TodoHeadBlock>
-      <DateText>{dayString}</DateText>
-    </TodoHeadBlock>
-  );
-};
-
 export default React.memo(TodoHead);

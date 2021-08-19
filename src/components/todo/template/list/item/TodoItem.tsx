@@ -5,6 +5,48 @@ import { Modal } from 'antd';
 import styled, { css } from 'styled-components';
 import { isEllipsis } from 'utils';
 
+interface TodoItemProps {
+  toggleTodo: (id: number) => void;
+  removeTodo: (id: number) => void;
+  todo: Itodo;
+}
+
+const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
+  const { done, text, id, date } = todo;
+  const handleToggle = () => {
+    toggleTodo(id);
+  };
+
+  const showModal = (flag: boolean) =>
+    flag &&
+    Modal.info({
+      title: '더 보기',
+      content: <p>{text}</p>,
+      onOk() {},
+    });
+
+  const handleTextClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    showModal(isEllipsis(e));
+  };
+  const handleRemove = () => {
+    removeTodo(id);
+  };
+
+  return (
+    <TodoItemBlock>
+      <CheckCircle done={done} onClick={handleToggle}>
+        {done && <CheckOutlined />}
+      </CheckCircle>
+      <Text done={done} onClick={handleTextClick}>
+        {text}
+      </Text>
+      <Date done={done}>{date}</Date>
+      <Remove onClick={handleRemove}>
+        <DeleteOutlined />
+      </Remove>
+    </TodoItemBlock>
+  );
+};
 const Remove = styled.div`
   display: flex;
   align-items: center;
@@ -69,48 +111,4 @@ const Date = styled.div<{ done: boolean }>`
       text-decoration: line-through;
     `}
 `;
-
-interface TodoItemProps {
-  toggleTodo: (id: number) => void;
-  removeTodo: (id: number) => void;
-  todo: Itodo;
-}
-
-const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
-  const { done, text, id, date } = todo;
-  const handleToggle = () => {
-    toggleTodo(id);
-  };
-
-  const showModal = (flag: boolean) =>
-    flag &&
-    Modal.info({
-      title: '더 보기',
-      content: <p>{text}</p>,
-      onOk() {},
-    });
-
-  const handleTextClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    showModal(isEllipsis(e));
-  };
-  const handleRemove = () => {
-    removeTodo(id);
-  };
-
-  return (
-    <TodoItemBlock>
-      <CheckCircle done={done} onClick={handleToggle}>
-        {done && <CheckOutlined />}
-      </CheckCircle>
-      <Text done={done} onClick={handleTextClick}>
-        {text}
-      </Text>
-      <Date done={done}>{date}</Date>
-      <Remove onClick={handleRemove}>
-        <DeleteOutlined />
-      </Remove>
-    </TodoItemBlock>
-  );
-};
-
 export default React.memo(TodoItem);

@@ -4,65 +4,6 @@ import { DatePicker } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { validationCheck } from 'utils';
 
-const CircleButton = styled.button<{ open: boolean }>`
-  background: #33bb77;
-  width: 50px;
-  height: 50px;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  left: 50%;
-  transform: translate(50%, 0%);
-  color: white;
-  border-radius: 50%;
-  border: none;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ValueLengthText = styled.div<{ error: boolean }>`
-  color: ${props => (props.error ? '#ff8269' : '#999')};
-`;
-
-const ErrorText = styled.div`
-  color: #ff8269;
-  margin-top: 5px;
-`;
-
-const InsertFormPositioner = styled.div`
-  width: 100%;
-  border-bottom: 1px solid #eeeeee;
-`;
-
-const InsertForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  background: #eeeeee;
-  padding-left: 40px;
-  padding-top: 36px;
-  padding-right: 60px;
-  padding-bottom: 36px;
-`;
-const InputSection = styled.section`
-  display: flex;
-`;
-const Input = styled.input`
-  padding: 12px;
-  border: solid #dddddd;
-  border-width: 1px 0 1px 1px;
-  width: 90%;
-  outline: none;
-  font-size: 21px;
-  box-sizing: border-box;
-  color: #119955;
-  &::placeholder {
-    color: #dddddd;
-    font-size: 16px;
-  }
-`;
-
 interface TodoCreateProps {
   nextId: number;
   createTodo: (todo: {
@@ -141,5 +82,62 @@ const TodoCreate = ({
     </>
   );
 };
+const CircleButton = styled.button<{ open: boolean }>`
+  background: #33bb77;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  left: 50%;
+  transform: translate(50%, 0%);
+  color: white;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
+const ValueLengthText = styled.div<{ error: boolean }>`
+  color: ${props => (props.error ? '#ff8269' : '#999')};
+`;
+
+const ErrorText = styled.div`
+  color: #ff8269;
+  margin-top: 5px;
+`;
+
+const InsertFormPositioner = styled.div`
+  width: 100%;
+  border-bottom: 1px solid #eeeeee;
+`;
+
+const InsertForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  background: #eeeeee;
+  padding-left: 40px;
+  padding-top: 36px;
+  padding-right: 60px;
+  padding-bottom: 36px;
+`;
+const InputSection = styled.section`
+  display: flex;
+`;
+const Input = styled.input`
+  padding: 12px;
+  border: solid #dddddd;
+  border-width: 1px 0 1px 1px;
+  width: 90%;
+  outline: none;
+  font-size: 21px;
+  box-sizing: border-box;
+  color: #119955;
+  &::placeholder {
+    color: #dddddd;
+    font-size: 16px;
+  }
+`;
 export default React.memo(TodoCreate);
