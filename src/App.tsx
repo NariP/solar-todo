@@ -1,7 +1,7 @@
-import React from "react";
-import "antd/dist/antd.css";
-import Spinner from "./components/common/Spinner";
-import TodoContainer from "./components/todo/TodoContainer";
+import React from 'react';
+import 'antd/dist/antd.css';
+import Spinner from 'components/common/Spinner';
+import TodoContainer from 'components/todo/TodoContainer';
 
 function App() {
   //@TODO login

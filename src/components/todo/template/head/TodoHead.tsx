@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getFormattedTime } from '../../../../utils';
-import { TIME_FORMAT } from '../../../../constants';
+import { getFormattedTime } from 'utils';
+import { TIME_FORMAT } from 'utils/constants';
 
 const TodoHeadBlock = styled.div`
   display: flex;

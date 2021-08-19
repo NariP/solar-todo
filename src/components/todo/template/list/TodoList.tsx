@@ -1,4 +1,4 @@
-import { Itodo } from '../../TodoService';
+import { Itodo } from 'components/todo/TodoService';
 import React from 'react';
 import styled from 'styled-components';
 import TodoItem from './item/TodoItem';
