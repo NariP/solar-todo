@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { localStorageHelper } from 'utils';
+import { LS_KEY } from 'utils/constants';
 
 export type Itodo = {
   id: number;
@@ -50,19 +52,13 @@ export const useTodo = () => {
   };
 
   const loadData = () => {
-    let data = localStorage.getItem('todos');
-    if (data === undefined) data = '';
-    let initialTodos;
-    if (data) {
-      initialTodos = JSON.parse(data);
-      if (initialTodos && initialTodos.length >= 1) {
-        incrementNextId();
-      }
-    }
+    const initialTodos = localStorageHelper.getItem(LS_KEY.TODOS) ?? '';
+    initialTodos?.length >= 1 && incrementNextId();
+    initialTodos && setTodoState(initialTodos);
   };
 
   const saveData = () => {
-    localStorage.setItem('todos', JSON.stringify(todoState));
+    localStorageHelper.setItem(LS_KEY.TODOS, todoState);
   };
 
   return {
