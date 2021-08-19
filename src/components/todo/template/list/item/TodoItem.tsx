@@ -1,7 +1,9 @@
 import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Itodo } from 'components/todo/TodoService';
 import React from 'react';
+import { Modal } from 'antd';
 import styled, { css } from 'styled-components';
+import { isEllipsis } from 'utils';
 
 const Remove = styled.div`
   display: flex;
@@ -43,6 +45,9 @@ const CheckCircle = styled.div<{ done: boolean }>`
 `;
 
 const Text = styled.div<{ done: boolean }>`
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   flex: 1;
   font-size: 16px;
   color: #119955;
@@ -77,6 +82,17 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
     toggleTodo(id);
   };
 
+  const showModal = (flag: boolean) =>
+    flag &&
+    Modal.info({
+      title: '더 보기',
+      content: <p>{text}</p>,
+      onOk() {},
+    });
+
+  const handleTextClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    showModal(isEllipsis(e));
+  };
   const handleRemove = () => {
     removeTodo(id);
   };
@@ -86,7 +102,9 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
       <CheckCircle done={done} onClick={handleToggle}>
         {done && <CheckOutlined />}
       </CheckCircle>
-      <Text done={done}>{text}</Text>
+      <Text done={done} onClick={handleTextClick}>
+        {text}
+      </Text>
       <Date done={done}>{date}</Date>
       <Remove onClick={handleRemove}>
         <DeleteOutlined />

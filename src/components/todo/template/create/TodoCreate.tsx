@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { DatePicker } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Itodo } from 'components/todo/TodoService';
+import { validationCheck } from 'utils';
 
 const CircleButton = styled.button<{ open: boolean }>`
   background: #33bb77;
@@ -22,6 +22,15 @@ const CircleButton = styled.button<{ open: boolean }>`
   justify-content: center;
 `;
 
+const ValueLengthText = styled.div<{ error: boolean }>`
+  color: ${props => (props.error ? '#ff8269' : '#999')};
+`;
+
+const ErrorText = styled.div`
+  color: #ff8269;
+  margin-top: 5px;
+`;
+
 const InsertFormPositioner = styled.div`
   width: 100%;
   border-bottom: 1px solid #eeeeee;
@@ -29,13 +38,16 @@ const InsertFormPositioner = styled.div`
 
 const InsertForm = styled.form`
   display: flex;
+  flex-direction: column;
   background: #eeeeee;
   padding-left: 40px;
   padding-top: 36px;
   padding-right: 60px;
   padding-bottom: 36px;
 `;
-
+const InputSection = styled.section`
+  display: flex;
+`;
 const Input = styled.input`
   padding: 12px;
   border: solid #dddddd;
@@ -69,45 +81,61 @@ const TodoCreate = ({
 }: TodoCreateProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
+  const [valueLength, setValueLength] = useState<number>(0);
   const [date, setDate] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>('');
 
   const handleToggle = () => setOpen(!open);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValueLength(e.target.value.length);
     setValue(e.target.value);
+  };
   const handleDateChange = (date: {} | null, dateString: string) =>
     setDate(dateString);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
+    if (validationCheck(value)) {
+      setErrorMessage(validationCheck(value));
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 1000);
+    } else {
+      createTodo({
+        id: nextId,
+        text: value,
+        done: false,
+        date,
+      });
+      incrementNextId(); // nextId 하나 증가
 
-    createTodo({
-      id: nextId,
-      text: value,
-      done: false,
-      date,
-    });
-    incrementNextId(); // nextId 하나 증가
-
-    setValue(''); // input 초기화
-    setDate(''); // date 초기화
-    setOpen(false); // open 닫기
+      setValue(''); // input 초기화
+      setDate(''); // date 초기화
+      setValueLength(0); // valueLength 초기화
+      setOpen(false); // open 닫기
+    }
   };
 
   return (
     <>
       <InsertFormPositioner>
         <InsertForm onSubmit={handleSubmit}>
-          <Input
-            autoFocus
-            placeholder="What's need to be done?"
-            onChange={handleChange}
-            value={value}
-            required={true}
-          />
-          <DatePicker onChange={handleDateChange} />
-          <CircleButton onClick={handleToggle} open={open}>
-            <PlusCircleOutlined />
-          </CircleButton>
+          <ValueLengthText error={valueLength > 200 || !valueLength}>
+            {valueLength} / 200
+          </ValueLengthText>
+          <InputSection>
+            <Input
+              autoFocus
+              placeholder="What's need to be done?"
+              onChange={handleChange}
+              value={value}
+            />
+            <DatePicker onChange={handleDateChange} />
+            <CircleButton onClick={handleToggle} open={open}>
+              <PlusCircleOutlined />
+            </CircleButton>
+          </InputSection>
+          <ErrorText>{errorMessage}</ErrorText>
         </InsertForm>
       </InsertFormPositioner>
     </>
