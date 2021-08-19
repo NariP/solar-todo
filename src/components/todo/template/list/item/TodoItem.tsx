@@ -54,15 +54,25 @@ const Text = styled.div<{ done: boolean }>`
     `}
 `;
 
+const Date = styled.div<{ done: boolean }>`
+  color: #119955;
+  margin-right: 10px;
+  ${props =>
+    props.done &&
+    css`
+      color: #ced4da;
+      text-decoration: line-through;
+    `}
+`;
+
 interface TodoItemProps {
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
-  id: number;
   todo: Itodo;
 }
 
-const TodoItem = ({ toggleTodo, removeTodo, id, todo }: TodoItemProps) => {
-  const { done, text } = todo;
+const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
+  const { done, text, id, date } = todo;
   const handleToggle = () => {
     toggleTodo(id);
   };
@@ -75,6 +85,7 @@ const TodoItem = ({ toggleTodo, removeTodo, id, todo }: TodoItemProps) => {
         {done && <CheckOutlined />}
       </CheckCircle>
       <Text done={done}>{text}</Text>
+      <Date done={done}>{date}</Date>
       <Remove onClick={handleRemove}>
         <DeleteOutlined />
       </Remove>

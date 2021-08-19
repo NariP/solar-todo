@@ -25,7 +25,6 @@ const TodoList = ({ toggleTodo, removeTodo, todos }: TodoListProps) => {
             toggleTodo={toggleTodo}
             removeTodo={removeTodo}
             key={todo.id}
-            id={todo.id}
             todo={todo}
           />
         ))}
