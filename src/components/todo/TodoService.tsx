@@ -35,7 +35,7 @@ export const useTodo = () => {
 
   const removeTodo = (id: number) => {
     setTodoState(prevState =>
-      prevState.filter((todo: Itodo) => todo.id === id),
+      prevState.filter((todo: Itodo) => todo.id !== id),
     );
   };
 
