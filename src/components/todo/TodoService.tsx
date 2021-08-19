@@ -10,7 +10,7 @@ let initialTodos: Itodo[] = [];
 
 export const useTodo = () => {
   const [todoState, setTodoState] = useState(initialTodos);
-  var nextIdState = 0;
+  let nextIdState = 0;
 
   useEffect(() => {
     loadData();
@@ -25,7 +25,11 @@ export const useTodo = () => {
   };
 
   const toggleTodo = (id: number) => {
-    //@TODO
+    setTodoState(prevState =>
+      prevState.map(todo =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo,
+      ),
+    );
   };
 
   const removeTodo = (id: number) => {

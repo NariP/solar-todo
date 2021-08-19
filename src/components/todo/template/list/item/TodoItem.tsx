@@ -57,12 +57,15 @@ const Text = styled.div<{ done: boolean }>`
 interface TodoItemProps {
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
+  id: number;
   todo: Itodo;
 }
 
-const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
-  const done = false;
-  const handleToggle = () => {};
+const TodoItem = ({ toggleTodo, removeTodo, id, todo }: TodoItemProps) => {
+  const { done, text } = todo;
+  const handleToggle = () => {
+    toggleTodo(id);
+  };
 
   const handleRemove = () => {};
 
@@ -71,7 +74,7 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
       <CheckCircle done={done} onClick={handleToggle}>
         {done && <CheckOutlined />}
       </CheckCircle>
-      <Text done={done}>{todo.text}</Text>
+      <Text done={done}>{text}</Text>
       <Remove onClick={handleRemove}>
         <DeleteOutlined />
       </Remove>
