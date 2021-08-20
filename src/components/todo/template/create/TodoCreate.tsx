@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import moment, { Moment } from 'moment';
 import { DatePicker } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { validationCheck } from 'utils';
+import { validationCheck, getKST, getFormattedTime } from 'utils';
 
 interface TodoCreateProps {
   nextId: number;
@@ -23,7 +24,7 @@ const TodoCreate = ({
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState('');
   const [valueLength, setValueLength] = useState<number>(0);
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(`${moment(getKST()).format('YYYY-MM-DD')}`);
   const [errorMessage, setErrorMessage] = useState<string | null>('');
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
@@ -32,18 +33,19 @@ const TodoCreate = ({
     setValueLength(e.target.value.length);
     setValue(e.target.value);
   };
-  const handleDateChange = (date: {} | null, dateString: string) =>
+  const handleDateChange = (date: Moment | null, dateString: string) => {
     setDate(dateString);
+  };
 
-  const handleFocus = () => {
+  const handleFocus = (): void => {
     setIsFocus(false);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (): void => {
     setIsFocus(true);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault(); // 새로고침 방지
     if (validationCheck(value)) {
       setErrorMessage(validationCheck(value));
@@ -60,10 +62,13 @@ const TodoCreate = ({
       incrementNextId(); // nextId 하나 증가
 
       setValue(''); // input 초기화
-      setDate(''); // date 초기화
       setValueLength(0); // valueLength 초기화
       setOpen(false); // open 닫기
     }
+  };
+
+  const disabledDate = (current: Moment): boolean => {
+    return current && current <= moment(getKST()).subtract(1, 'days');
   };
 
   return (
@@ -84,7 +89,11 @@ const TodoCreate = ({
               onFocus={handleFocus}
               value={value}
             />
-            <DatePicker onChange={handleDateChange} />
+            <DatePicker
+              disabledDate={disabledDate}
+              defaultValue={moment(getKST(), 'YYYY-MM-DD')}
+              onChange={handleDateChange}
+            />
             <CircleButton onClick={handleToggle} open={open}>
               <PlusCircleOutlined />
             </CircleButton>
