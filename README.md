@@ -41,12 +41,6 @@ npm install && npm run start
 
 ### Todo 입력 기능
 ![normal](https://user-images.githubusercontent.com/23569208/130186605-15da37ec-a291-4ead-8c70-8a29e3c15439.gif)
-- 입력하지 않았을 때
-  ![text_0](https://user-images.githubusercontent.com/23569208/130186097-68a9c9e4-695b-4082-bf30-1eb66f366d81.gif)
-- 200자 이상 입력했을 때
-  ![over200](https://user-images.githubusercontent.com/23569208/130186212-35a6a124-a088-4144-9dca-d2ee9b6a65dd.gif)
-- space만 입력했을 때
-  ![lotsOfspaces](https://user-images.githubusercontent.com/23569208/130186238-572cbd18-9faf-49d3-b426-be5a09e4d0fc.gif)
 ### 완료 기능
 ![finish](https://user-images.githubusercontent.com/23569208/130186286-730e0931-518f-4367-b17c-d927d6d86fe2.gif)
 ### 삭제 기능
