@@ -1,6 +1,7 @@
 import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Itodo } from 'components/todo/TodoService';
 import React from 'react';
+import { useState } from 'react';
 import { Modal } from 'antd';
 import styled, { css } from 'styled-components';
 import { isEllipsis } from 'utils';
@@ -13,20 +14,28 @@ interface TodoItemProps {
 
 const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
   const { done, text, id, date } = todo;
+  const [isTextOverflow, setIsTextOverflow] = useState<boolean>(false);
+
   const handleToggle = () => {
     toggleTodo(id);
   };
 
-  const showModal = (flag: boolean) =>
-    flag &&
+  const showModal = () =>
     Modal.info({
       title: '더 보기',
       content: <p>{text}</p>,
       onOk() {},
     });
+  const handleMouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
+    isEllipsis(e) && setIsTextOverflow(true);
+  };
+
+  const handleMouseOut = (e: React.MouseEvent<HTMLDivElement>) => {
+    isEllipsis(e) && setIsTextOverflow(false);
+  };
 
   const handleTextClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    showModal(isEllipsis(e));
+    isEllipsis(e) && showModal();
   };
   const handleRemove = () => {
     removeTodo(id);
@@ -37,7 +46,13 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
       <CheckCircle done={done} onClick={handleToggle}>
         {done && <CheckOutlined />}
       </CheckCircle>
-      <Text done={done} onClick={handleTextClick}>
+      <Text
+        done={done}
+        isTextOverflow={isTextOverflow}
+        onClick={handleTextClick}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+      >
         {text}
       </Text>
       <Date done={done}>{date}</Date>
@@ -47,6 +62,12 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
     </TodoItemBlock>
   );
 };
+
+interface IStyledProp {
+  done: boolean;
+  isTextOverflow?: boolean;
+}
+
 const Remove = styled.div`
   display: flex;
   align-items: center;
@@ -68,7 +89,7 @@ const TodoItemBlock = styled.div`
   }
 `;
 
-const CheckCircle = styled.div<{ done: boolean }>`
+const CheckCircle = styled.div<IStyledProp>`
   width: 20px;
   height: 20px;
   border-radius: 16px;
@@ -87,7 +108,7 @@ const CheckCircle = styled.div<{ done: boolean }>`
     `}
 `;
 
-const Text = styled.div<{ done: boolean }>`
+const Text = styled.div<IStyledProp>`
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -100,9 +121,14 @@ const Text = styled.div<{ done: boolean }>`
       color: #ced4da;
       text-decoration: line-through;
     `}
+  ${props =>
+    props.isTextOverflow &&
+    css`
+      cursor: pointer;
+    `}
 `;
 
-const Date = styled.div<{ done: boolean }>`
+const Date = styled.div<IStyledProp>`
   color: #119955;
   margin-right: 10px;
   ${props =>
