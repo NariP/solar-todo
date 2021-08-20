@@ -1,4 +1,4 @@
-const getKST = () => {
+const getKST = (): Date => {
   const currentTime = new Date();
   const UTC =
     currentTime.getTime() + currentTime.getTimezoneOffset() * 60 * 1000;
