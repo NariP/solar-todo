@@ -20,11 +20,12 @@ const TodoCreate = ({
   createTodo,
   incrementNextId,
 }: TodoCreateProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState('');
   const [valueLength, setValueLength] = useState<number>(0);
   const [date, setDate] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>('');
+  const [isFocus, setIsFocus] = useState<boolean>(false);
 
   const handleToggle = () => setOpen(!open);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,14 @@ const TodoCreate = ({
   };
   const handleDateChange = (date: {} | null, dateString: string) =>
     setDate(dateString);
+
+  const handleFocus = () => {
+    setIsFocus(false);
+  };
+
+  const handleBlur = () => {
+    setIsFocus(true);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // 새로고침 방지
@@ -61,7 +70,9 @@ const TodoCreate = ({
     <>
       <InsertFormPositioner>
         <InsertForm onSubmit={handleSubmit}>
-          <ValueLengthText error={valueLength > 200 || !valueLength}>
+          <ValueLengthText
+            error={(valueLength >= 200 || !valueLength) && !isFocus}
+          >
             {valueLength} / 200
           </ValueLengthText>
           <InputSection>
@@ -69,6 +80,8 @@ const TodoCreate = ({
               autoFocus
               placeholder="What's need to be done?"
               onChange={handleChange}
+              onBlur={handleBlur}
+              onFocus={handleFocus}
               value={value}
             />
             <DatePicker onChange={handleDateChange} />
