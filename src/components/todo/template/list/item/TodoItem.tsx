@@ -2,9 +2,8 @@ import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Itodo } from 'components/todo/TodoService';
 import React from 'react';
 import { useState } from 'react';
-import { Modal } from 'antd';
 import styled, { css } from 'styled-components';
-import { isEllipsis } from 'utils';
+import { isEllipsis, showModal } from 'utils';
 
 interface TodoItemProps {
   toggleTodo: (id: number) => void;
@@ -20,12 +19,6 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
     toggleTodo(id);
   };
 
-  const showModal = () =>
-    Modal.info({
-      title: '더 보기',
-      content: <p>{text}</p>,
-      onOk() {},
-    });
   const handleMouseOver = (e: React.MouseEvent<HTMLDivElement>) => {
     isEllipsis(e) && setIsTextOverflow(true);
   };
@@ -35,7 +28,7 @@ const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
   };
 
   const handleTextClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    isEllipsis(e) && showModal();
+    isEllipsis(e) && showModal(text);
   };
   const handleRemove = () => {
     removeTodo(id);

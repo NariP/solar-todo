@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { DatePicker } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { validationCheck, getKST, getFormattedTime } from 'utils';
+import { useDatepicker, useInputs } from 'utils/hooks';
+import { validationCheck, getKST } from 'utils';
 
 interface TodoCreateProps {
   nextId: number;
@@ -21,29 +22,11 @@ const TodoCreate = ({
   createTodo,
   incrementNextId,
 }: TodoCreateProps) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState('');
-  const [valueLength, setValueLength] = useState<number>(0);
-  const [date, setDate] = useState(`${moment(getKST()).format('YYYY-MM-DD')}`);
+  const { value, isFocus, handleChange, handleFocus, handleBlur, setValue } =
+    useInputs();
+  const { date, disabledDate, handleDateChange } = useDatepicker();
   const [errorMessage, setErrorMessage] = useState<string | null>('');
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-
-  const handleToggle = () => setOpen(!open);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValueLength(e.target.value.length);
-    setValue(e.target.value);
-  };
-  const handleDateChange = (date: Moment | null, dateString: string) => {
-    setDate(dateString);
-  };
-
-  const handleFocus = (): void => {
-    setIsFocus(false);
-  };
-
-  const handleBlur = (): void => {
-    setIsFocus(true);
-  };
+  const textLengthWarn = (value.length >= 200 || !value.length) && !isFocus;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault(); // 새로고침 방지
@@ -60,25 +43,16 @@ const TodoCreate = ({
         date,
       });
       incrementNextId(); // nextId 하나 증가
-
       setValue(''); // input 초기화
-      setValueLength(0); // valueLength 초기화
-      setOpen(false); // open 닫기
     }
-  };
-
-  const disabledDate = (current: Moment): boolean => {
-    return current && current <= moment(getKST()).subtract(1, 'days');
   };
 
   return (
     <>
       <InsertFormPositioner>
         <InsertForm onSubmit={handleSubmit}>
-          <ValueLengthText
-            error={(valueLength >= 200 || !valueLength) && !isFocus}
-          >
-            {valueLength} / 200
+          <ValueLengthText error={textLengthWarn}>
+            {value.length} / 200
           </ValueLengthText>
           <InputSection>
             <Input
@@ -94,7 +68,7 @@ const TodoCreate = ({
               defaultValue={moment(getKST(), 'YYYY-MM-DD')}
               onChange={handleDateChange}
             />
-            <CircleButton onClick={handleToggle} open={open}>
+            <CircleButton>
               <PlusCircleOutlined />
             </CircleButton>
           </InputSection>
@@ -104,7 +78,7 @@ const TodoCreate = ({
     </>
   );
 };
-const CircleButton = styled.button<{ open: boolean }>`
+const CircleButton = styled.button`
   background: #33bb77;
   width: 50px;
   height: 50px;
